@@ -86,11 +86,39 @@ const deleteUserController = async (req:any, res:any) => {
 
 }
 
+const getUserByAnyAttributeController = async (req: any, res: any) => {
+
+  
+  try {
+    
+    let userFoundedResult = await userService.getUserByAnyAttributeService(req);
+
+    return res.status(200).json({
+      status: 200,
+      message: "Consulta de usuario realizada con exito",
+      result: userFoundedResult
+    });
+
+
+  } 
+  catch (error:any) {
+    
+    return res.status(400).json({
+      status: 400,
+      message: error.message
+    });
+
+  }
+
+
+}
+
 
 
 export default {
   createUserController,
   loginUserController,
   modifyUserController,
-  deleteUserController
+  deleteUserController,
+  getUserByAnyAttributeController
 }

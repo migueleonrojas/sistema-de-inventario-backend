@@ -170,6 +170,13 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
           user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10))
         }
       },
+      afterFind(
+        instancesOrInstance: UserModel, 
+        options: FindOptions<InferAttributes<UserModel, { omit: never;}>>
+      ) {
+        
+
+      },
     }
  
   },

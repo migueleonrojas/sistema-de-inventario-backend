@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { NextFunction } from 'express';
 import userController from '../controllers/user.controller';
 import validationBodySchemaMiddleware from '../middleware/validationBodySchema.middleware';
 import validationQuerySchemaMiddleware from '../middleware/validationQuerySchema.middleware';
@@ -6,6 +6,13 @@ import verifyJWTMiddleware from '../middleware/verifyJWT.middleware';
 import userValidators  from '../validators/user.validators';
 
 const routerUser = express.Router();
+
+
+routerUser.get(
+  '/get-user-by-any-attribute',
+  [verifyJWTMiddleware.verifyJsonWebToken ,validationBodySchemaMiddleware.validateBodySchema(userValidators.getUserByAnyAttributeValidation)],
+  userController.getUserByAnyAttributeController
+);
 
 routerUser.post(
   '/create-user',
@@ -30,6 +37,5 @@ routerUser.delete(
   [verifyJWTMiddleware.verifyJsonWebToken, validationBodySchemaMiddleware.validateBodySchema(userValidators.deleteUserValidation)],
   userController.deleteUserController
 );
-
 
 export default { routerUser };

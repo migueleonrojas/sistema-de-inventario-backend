@@ -1,10 +1,46 @@
 import { UserModel } from "../interfaces/user.interface";
 import userModel from "../models/user.model";
 import moment from "moment";
-import bcrypt from 'bcrypt';
+import bcrypt, { compareSync } from 'bcrypt';
 import config from "../config/config";
 import jwt from 'jsonwebtoken';
-import { UniqueConstraintError, ValidationError, ValidationErrorItem } from "sequelize";
+import { Op, ValidationError } from "sequelize";
+
+
+const getUserByAnyAttributeService = async (query: any = {}) => {
+
+  try {
+  
+    let attibutesWhere = Object.entries(query.body).map(e => { return {[e[0]]: e[1]};});
+
+    const userFounded: UserModel | null = await userModel.User.findOne<UserModel>({
+      where: {
+        [Op.or]: [
+          ...attibutesWhere
+        ]
+      }
+    });
+
+    if(userFounded === null) {
+      throw Error('El usuario que intenta buscar no existe');
+    }
+
+    return {
+      mesagge: 'Se ha consultado el usuario de forma exitosa',
+      user: userFounded,
+    };
+    
+  } 
+  catch (error:any) {
+    if(error instanceof ValidationError){
+      throw Error(`${error.errors[0].message}`);
+    }
+    else {
+      throw Error(`${error.message}`);
+    }
+  }
+
+}
 
 
 const createUserService = async (query: any = {}) => {
@@ -13,7 +49,7 @@ const createUserService = async (query: any = {}) => {
 
     let date: string = moment().format('YYYY-MM-DDTHH:mm:ss');
 
-    const newUser = await userModel.User.create<UserModel>({
+    const newUser: UserModel = await userModel.User.create<UserModel>({
       fullname: query.body.fullname,
       username: query.body.username,
       id_user: query.body.id_user,
@@ -48,7 +84,7 @@ const loginUserService = async (query: any = {}) => {
 
     const { username, password } = query.body;
 
-    const user: UserModel | null= await userModel.User.findOne<UserModel>({
+    const user: UserModel | null = await userModel.User.findOne<UserModel>({
       where: {
         username:username
       }
@@ -61,12 +97,13 @@ const loginUserService = async (query: any = {}) => {
     }
 
 
-    const valid =  bcrypt.compareSync(password, user.get('password'));
+    const valid = bcrypt.compareSync(password, user.get('password'));
 
     if (!valid) {
       throw Error(`Las credenciales ingresadas son incorrectas`);
     }
 
+    
     
     const token = jwt.sign({check: true}, config.jsonConfig.private_key, { expiresIn: '1d'});
 
@@ -168,5 +205,6 @@ export default {
   createUserService,
   loginUserService,
   modifyUserService,
-  deleteUserService
+  deleteUserService,
+  getUserByAnyAttributeService
 }
