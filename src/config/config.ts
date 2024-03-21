@@ -16,7 +16,9 @@ const {
   OKTA_ORG_URL,
   OKTA_CLIENT_ID,
   OKTA_CLIENT_SECRET,
-  PRIVATE_KEY
+  PRIVATE_KEY,
+  EMAIL_SYSTEM,
+  PASSWORD_EMAIL_SYSTEM,
   
 } = process.env;
 
@@ -34,8 +36,12 @@ assert( OKTA_ORG_URL, "OKTA_ORG_URL configuration is required." );
 assert( OKTA_CLIENT_ID, "OKTA_CLIENT_ID configuration is required." );
 assert(OKTA_CLIENT_SECRET, "OKTA_CLIENT_SECRET configuration is required.");
 assert(PRIVATE_KEY, "PRIVATE_KEY configuration is required.");
+assert(EMAIL_SYSTEM, "EMAIL_SYSTEM configuration is required.");
+assert(PASSWORD_EMAIL_SYSTEM, "PASSWORD_EMAIL_SYSTEM configuration is required.");
 
 const jsonConfig = {
+  email_system: EMAIL_SYSTEM,
+  password_email_system: PASSWORD_EMAIL_SYSTEM,
   private_key: PRIVATE_KEY,
   port: Number.parseInt(PORT),
   host: HOST,

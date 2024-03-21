@@ -1,4 +1,4 @@
-import express, { NextFunction } from 'express';
+import express from 'express';
 import userController from '../controllers/user.controller';
 import validationBodySchemaMiddleware from '../middleware/validationBodySchema.middleware';
 import validationQuerySchemaMiddleware from '../middleware/validationQuerySchema.middleware';

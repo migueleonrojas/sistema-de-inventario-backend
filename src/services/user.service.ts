@@ -87,28 +87,26 @@ const loginUserService = async (query: any = {}) => {
     const user: UserModel | null = await userModel.User.findOne<UserModel>({
       where: {
         username:username
-      }
+      },
     });
 
     if(user === null){
-
       throw Error(`El nombre de usuario no existe`);
-
     }
 
-
-    const valid = bcrypt.compareSync(password, user.get('password'));
+    const valid = bcrypt.compareSync(password, user.get('password')!);
 
     if (!valid) {
       throw Error(`Las credenciales ingresadas son incorrectas`);
     }
-
-    
     
     const token = jwt.sign({check: true}, config.jsonConfig.private_key, { expiresIn: '1d'});
 
+    user.password = '';
+
     return {
       mesagge: 'Se ha ingresado con exito',
+      user: user,
       token: token,
     };
     
