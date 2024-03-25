@@ -8,7 +8,7 @@ import userValidators  from '../validators/user.validators';
 const routerUser = express.Router();
 
 
-routerUser.get(
+routerUser.post(
   '/get-user-by-any-attribute',
   [verifyJWTMiddleware.verifyJsonWebToken ,validationBodySchemaMiddleware.validateBodySchema(userValidators.getUserByAnyAttributeValidation)],
   userController.getUserByAnyAttributeController

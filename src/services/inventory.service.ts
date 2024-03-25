@@ -1,4 +1,4 @@
-import { ValidationError } from "sequelize";
+import { Op, Sequelize, ValidationError, fn } from "sequelize";
 import { InventoryModel } from "../interfaces/inventory.interface";
 import inventoryModel from "../models/inventory.model";
 
@@ -30,6 +30,53 @@ const createInventoryService = async (query: any = {}) => {
   }
 }
 
+
+const consultInventoryByParamsService = async (query: any = {}) => {
+
+  try{
+   
+    let attibutesWhere = Object.entries(query.body).map(e => {
+      return Sequelize.where(
+        Sequelize.fn('lower', Sequelize.col(e[0])), {
+          [Op.like]: `%${e[1]}%`
+        }
+      );
+    });
+
+    
+    const inventorys: InventoryModel[] = await inventoryModel.Inventory.findAll<InventoryModel>({
+      where: {
+        [Op.or]: [
+          ...attibutesWhere,
+        ],
+      }
+    });
+
+    return {
+      mesagge: `Cantidad de inventarios obtenidos => ${inventorys.length}.`,
+      inventorys: inventorys,
+    }
+
+
+
+  }
+  catch(error: any) {
+
+    if(error instanceof ValidationError){
+
+      throw Error(`${error.errors[0].message}`);
+    }
+    else {
+      throw Error(`${error.message}`);
+    }
+
+  }
+}
+
+
+
+
 export default {
-  createInventoryService
+  createInventoryService,
+  consultInventoryByParamsService
 }

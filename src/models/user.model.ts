@@ -20,13 +20,9 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
         notEmpty: {
           msg: 'El nombre y apellido no puede estar vacio,'
         },
-        min: {
-          args: [3],
-          msg: 'El nombre y apellido no puede ser menor a las 3 letras contando los espacios.'
-        },
-        max: {
-          args:[50],
-          msg: 'El nombre y apellido no puede superar las 50 letras contando los espacios.'
+        len: {
+          args: [3, 50],
+          msg: "El nombre y apellido no puede ser menor a las 3 letras contando los espacios y no puede superar las 50 letras contando los espacios."
         },
         is:{
           args:['^[ÁÉÍÓÚáéíóúA-Za-z ]+$','i'],
@@ -54,13 +50,9 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
         notEmpty: {
           msg: 'La identificación no puede estar vacio,'
         },
-        min: {
-          args: [11],
-          msg: 'La identificación no puede ser menor a las 11 letras.'
-        },
-        max: {
-          args: [11],
-          msg: 'La identificación no puede superar las 11 letras.'
+        len: {
+          args: [11, 11],
+          msg: "La identificación no puede ser menor a las 11 letras contando los espacios y no puede superar las 11 letras contando los espacios."
         },
         is: {
           args: ['^[V]{1,1}[-][0-9]{9,9}$','i'],
@@ -88,13 +80,9 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
         notEmpty: {
           msg: 'El nombre de usuario no puede estar vacio'
         },
-        min: {
-          args: [3],
-          msg: 'El nombre de usuario no puede ser menor a las 3 letras.'
-        },
-        max: {
-          args:[15],
-          msg: 'El nombre de usuario no puede superar las 15 letras.'
+        len: {
+          args: [3, 15],
+          msg: "El nombre de usuario no puede ser menor a las 3 letras contando los espacios y no puede superar las 15 letras contando los espacios."
         },
         is:{
           args:['^[A-Za-z]+$','i'],
@@ -109,13 +97,9 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
         notEmpty: {
           msg: 'La contraseña no puede estar vacio'
         },
-        min: {
-          args: [3],
-          msg: 'La contraseña no puede ser menor a las 3 letras.'
-        },
-        max: {
-          args:[100],
-          msg: 'La contraseña no puede superar las 100 letras.'
+        len: {
+          args: [3, 100],
+          msg: "La contraseña no puede ser menor a las 3 letras contando los espacios y no puede superar las 100 letras contando los espacios."
         },
         is:{
           args:['^[^ ]+$','g'],
@@ -144,10 +128,10 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
           args:['^[a-z0-9\.\_\-]+@[a-z]+[.][a-z]+$','i'],
           msg:'El correo no es valido. Ejm: lguzman@freshfishdelivery.com'
         },
-        max: {
-          args:[50],
-          msg: 'La correo no puede superar las 50 letras.'
-        }
+        len: {
+          args: [3, 50],
+          msg: "El correo no puede ser menor a las 3 letras contando los espacios y no puede superar las 50 letras contando los espacios."
+        },
       },
     },
     creation_date: {

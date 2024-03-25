@@ -14,7 +14,7 @@ const Inventory = sequelizeConnect.sequelize.define<InventoryModel>(
       autoIncrement: true,
     },
     name_inventory: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       unique: {
         msg: 'username',
         name:'Nombre del Inventario'
@@ -30,13 +30,9 @@ const Inventory = sequelizeConnect.sequelize.define<InventoryModel>(
 
           if(inventoryNameInventoryExist != null) throw Error('El nombre del Inventario ya existe');
         },
-        min: {
-          args: [3],
-          msg: 'El nombre del Inventario no puede ser menor a las 3 letras contando los espacios.'
-        },
-        max: {
-          args:[100],
-          msg: 'El nombre del Inventario no puede superar las 100 letras contando los espacios.'
+        len: {
+          args: [3, 100],
+          msg: "El nombre del Inventario no puede ser menor a las 3 letras contando los espacios y no puede superar las 100 letras contando los espacios."
         },
         is: {
           args: ['^.+$','i'],
@@ -61,13 +57,9 @@ const Inventory = sequelizeConnect.sequelize.define<InventoryModel>(
 
           if(inventoryDepartmentExist != null) throw Error('El Nombre del Departamento del Inventario ya existe');
         },
-        min: {
-          args: [3],
-          msg: 'El Nombre del Departamento del Inventario no puede ser menor a las 3 letras contando los espacios.'
-        },
-        max: {
-          args:[100],
-          msg: 'El Nombre del Departamento del Inventario no puede superar las 100 letras contando los espacios.'
+        len: {
+          args: [3, 100],
+          msg: "El Nombre del Departamento del Inventario no puede ser menor a las 3 letras contando los espacios y no puede superar las 100 letras contando los espacios."
         },
         is: {
           args: ['^.+$','i'],

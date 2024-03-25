@@ -85,6 +85,7 @@ const loginUserService = async (query: any = {}) => {
     const { username, password } = query.body;
 
     const user: UserModel | null = await userModel.User.findOne<UserModel>({
+      
       where: {
         username:username
       },
@@ -94,7 +95,7 @@ const loginUserService = async (query: any = {}) => {
       throw Error(`El nombre de usuario no existe`);
     }
 
-    const valid = bcrypt.compareSync(password, user.get('password')!);
+    const valid = bcrypt.compareSync(password, user.get('password'));
 
     if (!valid) {
       throw Error(`Las credenciales ingresadas son incorrectas`);
