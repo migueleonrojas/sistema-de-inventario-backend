@@ -44,6 +44,46 @@ const createArticleValidation = Joi.object<ArticleModel>().keys({
   })
 });
 
+
+const consultInventoryValidation = Joi.object<ArticleModel>()
+.or('name', 'brand', 'model', 'serial', 'observation').
+messages({
+  'object.missing': "Debe indicar por lo menos uno de los siguientes campo: name, brand, model, serial, observation"
+})
+.keys({
+  name: Joi.string().max(100).empty().regex(/^.+$/i).messages({
+    "string.base": "El nombre del Articulo debe ser un texto",
+    "string.max": "El nombre del Articulo debe tener 100 caracteres como máximo",
+    "string.empty": "El nombre del Articulo no puede estar vacio",
+    "string.pattern.base": "El nombre del Articulo tiene un formato incorrecto. Puede guiarse del siguiente nombre del articulo: Computadora",
+  }),
+  brand: Joi.string().max(100).empty().regex(/^.+$/i).messages({
+    "string.base": "El nombre de la marca del Articulo debe ser un texto",
+    "string.max": "El nombre de la marca del Articulo debe tener 100 caracteres como máximo",
+    "string.empty": "El nombre de la marca del Articulo no puede estar vacio",
+    "string.pattern.base": "El nombre de la marca del Articulo tiene un formato incorrecto. Puede guiarse del siguiente nombre de la marca del articulo: Sony",
+  }),
+  model: Joi.string().max(100).empty().regex(/^.+$/i).messages({
+    "string.base": "El nombre del modelo del Articulo debe ser un texto",
+    "string.max": "El nombre del modelo del Articulo debe tener 100 caracteres como máximo",
+    "string.empty": "El nombre del modelo del Articulo no puede estar vacio",
+    "string.pattern.base": "El nombre del modelo del Articulo tiene un formato incorrecto. Puede guiarse del siguiente nombre del modelo del articulo: Compact",
+  }),
+  serial: Joi.string().max(100).empty().regex(/^.+$/i).messages({
+    "string.base": "El serial del Articulo debe ser un texto",
+    "string.max": "El serial del Articulo debe tener 100 caracteres como máximo",
+    "string.empty": "El serial del Articulo no puede estar vacio",
+    "string.pattern.base": "El serial del Articulo tiene un formato incorrecto. Puede guiarse del siguiente serial de articulo: 0000-0000-0000-0000",
+  }),
+  observation: Joi.string().max(4000).empty().regex(/.+/i).messages({
+    "string.base": "La observación del Articulo debe ser un texto",
+    "string.max": "La observación del Articulo debe tener 100 caracteres como máximo",
+    "string.empty": "La observación del Articulo no puede estar vacio",
+    "string.pattern.base": "La observación del Articulo tiene un formato incorrecto. Puede guiarse de la siguiente observación del articulo: El articulo tiene la siguiente observación",
+  })
+});
+
 export default {
-  createArticleValidation
+  createArticleValidation,
+  consultInventoryValidation
 }

@@ -8,11 +8,6 @@ import { HookReturn } from "sequelize/types/hooks";
 const User = sequelizeConnect.sequelize.define<UserModel>(
   "User",
   {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
     fullname: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -168,8 +163,5 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
 
 );
 
+export default User
 
-
-export default {
-  User
-}

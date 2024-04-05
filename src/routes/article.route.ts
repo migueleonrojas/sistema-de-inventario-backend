@@ -12,4 +12,10 @@ routerArticle.post(
   articleController.createArticleController
 );
 
+routerArticle.post(
+  '/consult-articles',
+  [verifyJWTMiddleware.verifyJsonWebToken, validationBodySchemaMiddleware.validateBodySchema(articleValidators.consultInventoryValidation)],
+  articleController.consultingArticlesByAnyParamController
+)
+
 export default { routerArticle };

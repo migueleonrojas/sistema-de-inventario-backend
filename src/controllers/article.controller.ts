@@ -17,8 +17,32 @@ const createArticleController = async (req: any, res: any) => {
     });
   }
 
-}
+};
+
+const consultingArticlesByAnyParamController = async (req:any, res:any) => {
+
+  try{
+
+    let articleResult = await articleService.consultingArticlesByAnyParamService(req);
+    return res.status(200).json({
+      status: 200,
+      message: 'Resultado de la consulta de los articulos',
+      result: articleResult
+    });
+
+  }
+  catch(error:any) {
+
+    return res.status(400).json({
+      status: 400,
+      message: error.message
+    });
+
+  }
+
+};
 
 export default {
-  createArticleController
+  createArticleController,
+  consultingArticlesByAnyParamController
 }

@@ -13,7 +13,7 @@ const getUserByAnyAttributeService = async (query: any = {}) => {
   
     let attibutesWhere = Object.entries(query.body).map(e => { return {[e[0]]: e[1]};});
 
-    const userFounded: UserModel | null = await userModel.User.findOne<UserModel>({
+    const userFounded: UserModel | null = await userModel.findOne<UserModel>({
       where: {
         [Op.or]: [
           ...attibutesWhere
@@ -49,7 +49,7 @@ const createUserService = async (query: any = {}) => {
 
     let date: string = moment().format('YYYY-MM-DDTHH:mm:ss');
 
-    const newUser: UserModel = await userModel.User.create<UserModel>({
+    const newUser: UserModel = await userModel.create<UserModel>({
       fullname: query.body.fullname,
       username: query.body.username,
       id_user: query.body.id_user,
@@ -84,7 +84,7 @@ const loginUserService = async (query: any = {}) => {
 
     const { username, password } = query.body;
 
-    const user: UserModel | null = await userModel.User.findOne<UserModel>({
+    const user: UserModel | null = await userModel.findOne<UserModel>({
       
       where: {
         username:username
@@ -133,7 +133,7 @@ const modifyUserService = async (query: any = {}) => {
   try{
     const { fullname, username, password, id_user, email, id } = query.body;
 
-    const userModify: [affectedCount: number] = await userModel.User.update<UserModel>(
+    const userModify: [affectedCount: number] = await userModel.update<UserModel>(
       {
         fullname: fullname,
         username: username,
@@ -174,7 +174,7 @@ const deleteUserService = async (query: any = {}) => {
   try{
     const { id } = query.body;
 
-    let userDestroyed: number = await userModel.User.destroy<UserModel>({
+    let userDestroyed: number = await userModel.destroy<UserModel>({
       where: {
         id: id
       }

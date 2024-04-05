@@ -1,6 +1,8 @@
 import { Op, Sequelize, ValidationError, fn } from "sequelize";
 import { InventoryModel } from "../interfaces/inventory.interface";
 import inventoryModel from "../models/inventory.model";
+import articleAssignedToInventoryModel from "../models/article_assigned_to_Inventory.model";
+import locationModel from "../models/location.model";
 
 
 const createInventoryService = async (query: any = {}) => {
@@ -8,7 +10,7 @@ const createInventoryService = async (query: any = {}) => {
   try {
     const { name_inventory, department } = query.body;
 
-    const newInventory: InventoryModel = await inventoryModel.Inventory.create<InventoryModel>({
+    const newInventory: InventoryModel = await inventoryModel.create<InventoryModel>({
       name_inventory: name_inventory,
       department: department
     });
@@ -44,12 +46,22 @@ const consultInventoryByParamsService = async (query: any = {}) => {
     });
 
     
-    const inventorys: InventoryModel[] = await inventoryModel.Inventory.findAll<InventoryModel>({
+    const inventorys: InventoryModel[] = await inventoryModel.findAll<InventoryModel>({
       where: {
         [Op.or]: [
           ...attibutesWhere,
         ],
-      }
+      },
+      include: [
+        {
+          model: articleAssignedToInventoryModel,
+          include: [
+            {
+              model: locationModel
+            }
+          ]
+        }
+      ]
     });
 
     return {

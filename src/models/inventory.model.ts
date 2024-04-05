@@ -1,9 +1,10 @@
 
 import { DataTypes } from "sequelize";
 import sequelizeConnect from "../database/mssql";
-
-
 import { InventoryModel } from "../interfaces/inventory.interface";
+import article_assigned_to_InventoryModel from "./article_assigned_to_Inventory.model";
+import locationModel from "./location.model";
+
 
 const Inventory = sequelizeConnect.sequelize.define<InventoryModel>(
   'Inventory',
@@ -42,21 +43,8 @@ const Inventory = sequelizeConnect.sequelize.define<InventoryModel>(
     }, 
     department: {
       type: DataTypes.TEXT,
-      unique: {
-        msg: 'department',
-        name:'Nombre del Departamento del Inventario'
-      },
       allowNull: false,
       validate: {
-        async unique(value:any) {
-          let inventoryDepartmentExist: InventoryModel | null = await Inventory.findOne<InventoryModel>({
-            where:{
-              department:value
-            }
-          });
-
-          if(inventoryDepartmentExist != null) throw Error('El Nombre del Departamento del Inventario ya existe');
-        },
         len: {
           args: [3, 100],
           msg: "El Nombre del Departamento del Inventario no puede ser menor a las 3 letras contando los espacios y no puede superar las 100 letras contando los espacios."
@@ -71,10 +59,13 @@ const Inventory = sequelizeConnect.sequelize.define<InventoryModel>(
   
   },
   {
-    tableName: 'Inventorys'
+    tableName: 'Inventorys',
   }
 );
 
-export default {
-  Inventory
-}
+Inventory.hasMany(article_assigned_to_InventoryModel, {
+  foreignKey: 'id_inventory'
+});
+
+
+export default Inventory

@@ -15,6 +15,11 @@ const sequelize = new Sequelize(
   }
 );
 
+/* (async () => {
+  await sequelize.sync({force: true});
+})() */
+
+
 
 export default {
   sequelize
