@@ -42,7 +42,16 @@ messages({
   }),
 });
 
+const deleteInventoryValidation = Joi.object<InventoryModel>().keys({
+  id: Joi.number().required().empty().messages({
+    "number.base": "El id del inventario debe ser un número",
+    "any.required": "El id del inventario debe indicarse",
+    "number.empty": "El id del inventario no debe estar vacio",
+  })
+});
+
 export default {
   createInventoryValidation,
-  consultInventoryValidation
+  consultInventoryValidation,
+  deleteInventoryValidation
 }

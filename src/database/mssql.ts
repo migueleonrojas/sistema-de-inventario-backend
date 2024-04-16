@@ -1,7 +1,7 @@
 import config from "../config/config";
 import { Sequelize } from "sequelize";
 
-const sequelize = new Sequelize(
+const sequelize: Sequelize = new Sequelize(
   config.jsonConfig.sql.database,
   config.jsonConfig.sql.user,
   config.jsonConfig.sql.password,
@@ -21,6 +21,4 @@ const sequelize = new Sequelize(
 
 
 
-export default {
-  sequelize
-}
+export default sequelize

@@ -1,12 +1,12 @@
 
-import { DataTypes } from "sequelize";
+import { DataTypes, FindOptions, InferAttributes } from "sequelize";
 import sequelizeConnect from "../database/mssql";
 import { InventoryModel } from "../interfaces/inventory.interface";
 import article_assigned_to_InventoryModel from "./article_assigned_to_Inventory.model";
 import locationModel from "./location.model";
 
 
-const Inventory = sequelizeConnect.sequelize.define<InventoryModel>(
+const Inventory = sequelizeConnect.define<InventoryModel>(
   'Inventory',
   {
     id: {
@@ -64,7 +64,8 @@ const Inventory = sequelizeConnect.sequelize.define<InventoryModel>(
 );
 
 Inventory.hasMany(article_assigned_to_InventoryModel, {
-  foreignKey: 'id_inventory'
+  foreignKey: 'id_inventory',
+  onDelete: 'CASCADE',
 });
 
 

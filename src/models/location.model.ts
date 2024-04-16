@@ -6,7 +6,7 @@ import inventoryModel from "./inventory.model";
 
 
 
-const Location =  sequelizeConnect.sequelize.define<LocationModel>(
+const Location =  sequelizeConnect.define<LocationModel>(
   'Location', 
   {
     id: {

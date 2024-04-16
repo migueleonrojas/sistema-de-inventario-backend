@@ -19,7 +19,7 @@ app.use(routes.allRoutes);
 const connectDB = async () => {
 
   try {
-    await sequelizeConnect.sequelize.authenticate();
+    await sequelizeConnect.authenticate();
     console.log('Connection has been established successfully.');
   }
   catch (error) {

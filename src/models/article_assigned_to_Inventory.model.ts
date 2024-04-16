@@ -4,7 +4,7 @@ import { ArticleAssignedToInventoryModel } from "../interfaces/article_assigned_
 import inventoryModel from "./inventory.model";
 import locationModel from "./location.model";
 
-const ArticleAssignedToInventory = sequelizeConnect.sequelize.define<ArticleAssignedToInventoryModel>(
+const ArticleAssignedToInventory = sequelizeConnect.define<ArticleAssignedToInventoryModel>(
   'ArticleAssignedToInventory',
   {
     id: {

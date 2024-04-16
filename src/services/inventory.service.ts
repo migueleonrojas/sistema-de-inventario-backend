@@ -86,9 +86,69 @@ const consultInventoryByParamsService = async (query: any = {}) => {
 }
 
 
+const getLastIdInventoryCreatedService = async (query: any = {}) => {
+
+  try{
+
+    const lastInventoryCreated: InventoryModel | null = await inventoryModel.max<InventoryModel | null, InventoryModel>("id");
+
+    return {
+      mesagge: `El id del ultimo inventario creado.`,
+      last_id_inventory: lastInventoryCreated,
+    }
+  }
+
+  catch(error:any) {
+    if(error instanceof ValidationError){
+
+      throw Error(`${error.errors[0].message}`);
+    }
+    else {
+      throw Error(`${error.message}`);
+    }
+  }
+}
+
+const deleteInventoryByIdService = async (query: any = {}) => {
+
+  try{
+
+    const { id } = query.body;
+
+    let countRowInventoryDeleted: number = await inventoryModel.destroy<InventoryModel>({
+      where: {
+        id:id
+      }
+    });
+
+    if(countRowInventoryDeleted === 0) throw Error('El inventario que intenta eliminar no existe');
+    
+
+    return {
+      message: 'Se ha eliminado un registro de los inventarios',
+      number_of_inventorys_deleted: countRowInventoryDeleted 
+    }
+
+  }
+  catch(error:any) {
+    if(error instanceof ValidationError){
+
+      throw Error(`${error.errors[0].message}`);
+    }
+    else {
+      console.log(error.message);
+      throw Error(`${error.message}`);
+    }
+  }
+
+}
+
+
 
 
 export default {
   createInventoryService,
-  consultInventoryByParamsService
+  consultInventoryByParamsService,
+  getLastIdInventoryCreatedService,
+  deleteInventoryByIdService
 }

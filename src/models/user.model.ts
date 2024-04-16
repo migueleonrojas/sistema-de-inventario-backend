@@ -1,13 +1,17 @@
-import { CreateOptions, DataTypes, FindOptions, InferAttributes, InstanceUpdateOptions, Sequelize } from "sequelize";
+import { CreateOptions, DataTypes, InferAttributes, InferCreationAttributes, InstanceUpdateOptions, Model } from "sequelize";
+import { UserModel } from "../interfaces/user.interface";
 import sequelizeConnect from "../database/mssql";
 import bcrypt from 'bcrypt';
-import { UserModel } from "../interfaces/user.interface";
-import { Fn } from "sequelize/types/utils";
-import { HookReturn } from "sequelize/types/hooks";
 
-const User = sequelizeConnect.sequelize.define<UserModel>(
-  "User",
+
+export class User extends Model<InferAttributes<UserModel>, InferCreationAttributes<UserModel>>{}
+
+User.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true
+    },
     fullname: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -23,36 +27,24 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
           args:['^[ÁÉÍÓÚáéíóúA-Za-z ]+$','i'],
           msg:'El nombre y apellido no valido. Ejm: Luis Guzman'
         },
+        notNull: {
+          msg: 'El nombre y apellido no puede ser nulo'
+        }
       }
     },
     id_user: {
       type: DataTypes.TEXT,
       allowNull: false,
-      unique: {
-        msg: 'La identificación ya existe',
-        name: 'id_user'
-      },
+      primaryKey: true,
       validate: {
-        async unique(value:any) {
-          let userIdUserExist: UserModel | null = await User.findOne<UserModel>({
-            where:{
-              id_user:value
-            }
-          });
-
-          if(userIdUserExist != null) throw Error('La identificación ya existe');
-        },
-        notEmpty: {
-          msg: 'La identificación no puede estar vacio,'
-        },
         len: {
-          args: [11, 11],
-          msg: "La identificación no puede ser menor a las 11 letras contando los espacios y no puede superar las 11 letras contando los espacios."
+          args: [36, 36],
+          msg: 'El id del usuario debe tener 36 caracteres'
         },
-        is: {
-          args: ['^[V]{1,1}[-][0-9]{9,9}$','i'],
-          msg:'La identificación no es valida. Ejm: V-023947635'
-        },
+        notNull: {
+          msg: 'El id del usuario no puede ser nulo'
+        }
+
       }
     },
     username: {
@@ -64,9 +56,10 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
       allowNull: false,
       validate: {
         async unique(value:any) {
-          let userUsernameExist: UserModel | null = await User.findOne<UserModel>({
-            where:{
-              username:value
+
+          let userUsernameExist: User | null = await User.findOne<User>({
+            where: {
+              username: value
             }
           });
 
@@ -82,6 +75,9 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
         is:{
           args:['^[A-Za-z]+$','i'],
           msg:'El nombre de usuario no es valido. Ejm: lguzman'
+        },
+        notNull: {
+          msg: 'El nombre de usuario no puede ser nulo'
         }
       },
     },
@@ -99,6 +95,9 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
         is:{
           args:['^[^ ]+$','g'],
           msg:'La contraseña no es valida. Ejm: Venezuela.2024'
+        },
+        notNull: {
+          msg: 'La contraseña no puede ser nulo'
         }
       }
     },
@@ -111,7 +110,7 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
       },
       validate: {
         async unique(value:any) {
-          let userWithEmailExist: UserModel | null = await User.findOne<UserModel>({
+          let userWithEmailExist: User | null = await User.findOne<User>({
             where:{
               email:value
             }
@@ -127,41 +126,42 @@ const User = sequelizeConnect.sequelize.define<UserModel>(
           args: [3, 50],
           msg: "El correo no puede ser menor a las 3 letras contando los espacios y no puede superar las 50 letras contando los espacios."
         },
+        notNull: {
+          msg: 'El correo no puede ser nulo'
+        }
       },
     },
     creation_date: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'La fecha de creación no puede ser nulo'
+        }
+      }
     },
     modification_date: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'La fecha de modificación no puede ser nulo'
+        }
+      }
     },
-  },
-  {
-    tableName: 'Users',
+
+  }, {
+    tableName:'Users',
+    sequelize: sequelizeConnect,
     hooks: {
       beforeSave (
         user: UserModel, 
         options: InstanceUpdateOptions<InferAttributes<UserModel, {omit: never;}>> | CreateOptions<InferAttributes<UserModel, {omit:never;}>>
-      ): HookReturn {
+      ) {
         if(user.changed('password')) {
           user.password = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10))
         }
-      },
-      afterFind(
-        instancesOrInstance: UserModel, 
-        options: FindOptions<InferAttributes<UserModel, { omit: never;}>>
-      ) {
-        
-
-      },
+      }
     }
- 
-  },
-  
-
+  }
 );
-
-export default User
-

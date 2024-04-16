@@ -15,9 +15,11 @@ const createArticleAssignedToInventoryValidation = Joi.object().keys({
         "number.empty": "El id de la locación no puede estar vacio.",
         "any.required": "El id de la locación debe indicarse.",
       }),
-      amount: Joi.number().empty().required().messages({
+      amount: Joi.number().min(1).max(100).empty().required().messages({
         "number.base": "La cantidad debe ser un número.",
         "number.empty": "La cantidad no puede estar vacio.",
+        "number.min": "En cantidad de articulo debe indicar por lo menos 1",
+        "number.max": "En cantidad de articulo debe indicar por lo máximo 100",
         "any.required": "La cantidad debe indicarse.",
       }),
       name: Joi.string().min(3).max(100).empty().required().regex(/^.+$/i).messages({

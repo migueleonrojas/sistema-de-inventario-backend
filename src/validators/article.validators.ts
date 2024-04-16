@@ -2,6 +2,16 @@ import Joi from "joi"
 import { ArticleModel } from "../interfaces/article.interface";
 
 const createArticleValidation = Joi.object<ArticleModel>().keys({
+  id_article: Joi.number().empty().messages({
+    "number.base": "El id del articulo debe ser un número.",
+    "number.empty": "El id del articulo no puede estar vacio.",
+  }),
+  id_user: Joi.string().required().empty().max(36).messages({
+    "string.base": "El id del usuario debe ser un texto",
+    "any.required": "El id del usuario debe indicarse",
+    "string.empty": "El id del usuario no puede estar vacio",
+    "string.max": "El id del usuario debe tener 36 caracteres como máximo",
+  }),
   name: Joi.string().min(3).max(100).empty().required().regex(/^.+$/i).messages({
     "string.base": "El nombre del Articulo debe ser un texto",
     "string.min": "El nombre del Articulo debe tener 3 caracter como mínimo",
